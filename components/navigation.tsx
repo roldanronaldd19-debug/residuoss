@@ -2,12 +2,13 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Recycle, LogOut, LogIn, Edit3, Menu, X } from "lucide-react"
+import { LogOut, LogIn, Edit3, Menu, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { createClient } from "@/lib/supabase/client"
 import { useRouter } from "next/navigation"
 import { LoginModal } from "@/components/login-modal"
 import { useState, useEffect } from "react"
+import Image from "next/image"
 
 export function Navigation() {
   const pathname = usePathname()
@@ -68,32 +69,44 @@ export function Navigation() {
   return (
     <>
       <header className="sticky top-0 z-50 w-full border-b bg-gradient-to-r from-emerald-600 via-green-600 to-emerald-600 shadow-lg backdrop-blur-sm">
-        <div className="container flex h-16 items-center justify-between px-4">
-          <div className="flex items-center gap-2 md:gap-8">
+        <div className="container flex h-16 items-center justify-between px-4 md:h-20">
+          <div className="flex items-center gap-2 md:gap-3">
+            <Image
+              src="/images/logo-ug.png"
+              alt="Universidad de Guayaquil"
+              width={40}
+              height={40}
+              className="h-8 w-auto md:h-10 lg:h-12"
+            />
+            <div className="hidden h-8 w-px bg-white/30 sm:block md:h-10" />
             <Link href="/" className="flex items-center gap-2 transition-transform hover:scale-105 md:gap-3">
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-white/20 backdrop-blur md:h-10 md:w-10">
-                <Recycle className="h-5 w-5 text-white md:h-6 md:w-6" />
-              </div>
-              <span className="hidden text-sm font-bold text-white sm:inline-block md:text-base lg:text-lg">
+              <Image
+                src="/images/ingenieria.png"
+                alt="Facultad de Ingeniería Industrial"
+                width={48}
+                height={48}
+                className="h-10 w-auto md:h-12 lg:h-14"
+              />
+              <span className="hidden text-xs font-bold text-white sm:inline-block md:text-sm lg:text-base">
                 Gestión de Residuos Sólidos
               </span>
             </Link>
-
-            {/* Desktop Navigation */}
-            <nav className="hidden items-center gap-1 lg:flex">
-              {navItems.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={`rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200 hover:bg-white/20 hover:shadow-md ${
-                    pathname === item.href ? "bg-white/30 text-white shadow-md" : "text-white/90"
-                  }`}
-                >
-                  {item.label}
-                </Link>
-              ))}
-            </nav>
           </div>
+
+          {/* Desktop Navigation */}
+          <nav className="hidden items-center gap-1 lg:flex">
+            {navItems.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200 hover:bg-white/20 hover:shadow-md ${
+                  pathname === item.href ? "bg-white/30 text-white shadow-md" : "text-white/90"
+                }`}
+              >
+                {item.label}
+              </Link>
+            ))}
+          </nav>
 
           {/* Desktop Actions */}
           <div className="hidden items-center gap-2 lg:flex">
@@ -150,6 +163,23 @@ export function Navigation() {
         {mobileMenuOpen && (
           <div className="animate-in slide-in-from-top border-t border-white/20 bg-gradient-to-r from-emerald-600 via-green-600 to-emerald-600 lg:hidden">
             <nav className="container flex flex-col gap-1 px-4 py-4">
+              <div className="flex items-center gap-2 mb-4">
+                <Image
+                  src="/images/logo-ug.png"
+                  alt="Universidad de Guayaquil"
+                  width={40}
+                  height={40}
+                  className="h-8 w-auto"
+                />
+                <div className="h-8 w-px bg-white/30" />
+                <Image
+                  src="/images/ingenieria.png"
+                  alt="Facultad de Ingeniería Industrial"
+                  width={48}
+                  height={48}
+                  className="h-10 w-auto"
+                />
+              </div>
               {navItems.map((item) => (
                 <Link
                   key={item.href}
