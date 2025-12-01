@@ -22,6 +22,18 @@ export default function ComportamientoProambientalPage() {
         onLoad={() => console.log("[v0] ChartDataLabels loaded")}
       />
 
+      <Script
+        id="supabase-init"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: `
+            window.SUPABASE_URL = "${process.env.NEXT_PUBLIC_SUPABASE_URL}";
+            window.SUPABASE_ANON_KEY = "${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}";
+            console.log("[v0] Supabase credentials loaded");
+          `,
+        }}
+      />
+
       <Navigation />
       <div
         dangerouslySetInnerHTML={{
@@ -1110,18 +1122,19 @@ export default function ComportamientoProambientalPage() {
             console.log('[v0] Waiting for scripts to load...');
             
             // Wait for all scripts to load
-            while (!window.supabase || !window.Chart || !window.ChartDataLabels) {
+            while (!window.supabase || !window.Chart || !window.ChartDataLabels || !window.SUPABASE_URL || !window.SUPABASE_ANON_KEY) {
               await new Promise(resolve => setTimeout(resolve, 100));
             }
             
             console.log('[v0] All scripts loaded, initializing dashboard...');
             
-            // Initialize Supabase client
             const { createClient } = window.supabase;
             const supabase = createClient(
-              '${process.env.NEXT_PUBLIC_SUPABASE_URL}',
-              '${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}'
+              window.SUPABASE_URL,
+              window.SUPABASE_ANON_KEY
             );
+            
+            console.log('[v0] Supabase client created');
             
             // Register Chart.js plugin
             window.Chart.register(window.ChartDataLabels);
@@ -1143,15 +1156,19 @@ export default function ComportamientoProambientalPage() {
             }
             
             async function cargarFiltros() {
+              console.log('[v0] Fetching filter options from Supabase...');
               const { data, error } = await supabase
                 .from('cuestionario_comportamiento_proambiental_autosustentabilidad')
                 .select('estado_civil, educacion_jefe_hogar, situacion_laboral_jefe_hogar, ingreso_mensual_jefe_hogar');
               
               if (error) {
                 console.error('[v0] Error loading filters:', error);
+                alert('Error al cargar los filtros. Por favor, verifica la conexión a la base de datos.');
                 return;
               }
               
+              console.log('[v0] Loaded ' + data.length + ' records for filters');
+
               const estadosCiviles = [...new Set(data.map(r => r.estado_civil).filter(Boolean))].sort();
               const nivelesEducacion = [...new Set(data.map(r => r.educacion_jefe_hogar).filter(Boolean))].sort();
               const situacionesLaborales = [...new Set(data.map(r => r.situacion_laboral_jefe_hogar).filter(Boolean))].sort();
@@ -1178,20 +1195,35 @@ export default function ComportamientoProambientalPage() {
             }
             
             async function obtenerFiltrados() {
+              console.log('[v0] Fetching filtered data...');
               let query = supabase.from('cuestionario_comportamiento_proambiental_autosustentabilidad').select('*');
               
-              if (selectEstadoCivil.value) query = query.eq('estado_civil', selectEstadoCivil.value);
-              if (selectEducacion.value) query = query.eq('educacion_jefe_hogar', selectEducacion.value);
-              if (selectSituacionLaboral.value) query = query.eq('situacion_laboral_jefe_hogar', selectSituacionLaboral.value);
-              if (selectIngreso.value) query = query.eq('ingreso_mensual_jefe_hogar', selectIngreso.value);
+              if (selectEstadoCivil.value) {
+                query = query.eq('estado_civil', selectEstadoCivil.value);
+                console.log('[v0] Filtering by estado_civil:', selectEstadoCivil.value);
+              }
+              if (selectEducacion.value) {
+                query = query.eq('educacion_jefe_hogar', selectEducacion.value);
+                console.log('[v0] Filtering by educacion:', selectEducacion.value);
+              }
+              if (selectSituacionLaboral.value) {
+                query = query.eq('situacion_laboral_jefe_hogar', selectSituacionLaboral.value);
+                console.log('[v0] Filtering by situacion_laboral:', selectSituacionLaboral.value);
+              }
+              if (selectIngreso.value) {
+                query = query.eq('ingreso_mensual_jefe_hogar', selectIngreso.value);
+                console.log('[v0] Filtering by ingreso:', selectIngreso.value);
+              }
               
               const { data, error } = await query;
               
               if (error) {
                 console.error('[v0] Error filtering data:', error);
+                alert('Error al obtener los datos filtrados.');
                 return [];
               }
               
+              console.log('[v0] Fetched ' + (data ? data.length : 0) + ' filtered records');
               return data || [];
             }
             
@@ -1261,12 +1293,6 @@ export default function ComportamientoProambientalPage() {
               rows.forEach(row => {
                 if (row.tipo_hogar) {
                   hogarCounts[row.tipo_hogar] = (hogarCounts[row.tipo_hogar] || 0) + 1;
-                }
-              });
-              const totalHogar = Object.values(hogarCounts).reduce((a, b) => a + b, 0);
-              const hogar = {};
-              Object.keys(hogarCounts).forEach(key => {
-                hogar[key] = totalHogar > 0 ? (hogarCounts[row.tipo_hogar] || 0) + 1;
                 }
               });
               const totalHogar = Object.values(hogarCounts).reduce((a, b) => a + b, 0);
