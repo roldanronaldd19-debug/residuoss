@@ -163,23 +163,6 @@ export function Navigation() {
         {mobileMenuOpen && (
           <div className="animate-in slide-in-from-top border-t border-white/20 bg-gradient-to-r from-emerald-600 via-green-600 to-emerald-600 lg:hidden">
             <nav className="container flex flex-col gap-1 px-4 py-4">
-              <div className="flex items-center gap-2 mb-4">
-                <Image
-                  src="/images/logo-ug.png"
-                  alt="Universidad de Guayaquil"
-                  width={40}
-                  height={40}
-                  className="h-8 w-auto"
-                />
-                <div className="h-8 w-px bg-white/30" />
-                <Image
-                  src="/images/ingenieria.png"
-                  alt="Facultad de Ingeniería Industrial"
-                  width={48}
-                  height={48}
-                  className="h-10 w-auto"
-                />
-              </div>
               {navItems.map((item) => (
                 <Link
                   key={item.href}

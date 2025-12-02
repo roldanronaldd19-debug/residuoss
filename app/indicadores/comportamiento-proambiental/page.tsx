@@ -350,6 +350,82 @@ export default function ComportamientoProambientalPage() {
           .table-responsive {
             overflow-x: auto;
           }
+
+          /* Improved mobile responsiveness */
+          .container {
+            padding: 0.5rem;
+          }
+
+          .controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.5rem;
+            margin-bottom: 20px;
+          }
+          
+          .controls select {
+            font-size: 14px;
+            padding: 0.5rem;
+          }
+          
+          .chart-container {
+            height: 350px;
+            padding: 0.5rem;
+          }
+          
+          .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+          }
+          
+          .summary-card {
+            padding: 0.75rem;
+          }
+          
+          .summary-card .value {
+            font-size: 1.25rem;
+          }
+          
+          .charts-grid {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+          }
+          
+          .question-charts {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+          }
+          
+          .question-chart-container {
+            height: 300px;
+            padding: 0.5rem;
+          }
+          
+          .question-chart-container h3 {
+            font-size: 0.875rem;
+            padding: 0.5rem;
+          }
+          
+          table {
+            font-size: 0.875rem;
+          }
+          
+          th, td {
+            padding: 0.5rem;
+          }
+          
+          .tabs {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+          }
+          
+          .tab-button {
+            font-size: 0.875rem;
+            padding: 0.5rem 1rem;
+            white-space: nowrap;
+          }
           
           @media (max-width: 768px) {
             .controls {
@@ -362,18 +438,81 @@ export default function ComportamientoProambientalPage() {
             
             .summary-cards {
               grid-template-columns: 1fr;
+              gap: 0.75rem;
+            }
+            
+            .summary-card {
+              padding: 0.75rem;
+            }
+            
+            .summary-card h3 {
+              font-size: 0.875rem;
+            }
+            
+            .summary-card .value {
+              font-size: 1.25rem;
             }
             
             .charts-grid {
               grid-template-columns: 1fr;
+              gap: 1rem;
             }
             
             .question-charts {
               grid-template-columns: 1fr;
+              gap: 1rem;
             }
             
             .question-chart-container {
               height: 350px;
+              padding: 0.5rem;
+            }
+            
+            .question-chart-container h3 {
+              font-size: 0.875rem;
+              padding: 0.5rem;
+            }
+            
+            table {
+              font-size: 0.875rem;
+            }
+            
+            th, td {
+              padding: 0.5rem;
+            }
+            
+            .tabs {
+              overflow-x: auto;
+              -webkit-overflow-scrolling: touch;
+            }
+            
+            .tab-button {
+              font-size: 0.875rem;
+              padding: 0.5rem 1rem;
+              white-space: nowrap;
+            }
+          }
+          
+          @media (max-width: 480px) {
+            /* Extra small devices adjustments */
+            .chart-container {
+              height: 300px;
+            }
+            
+            .question-chart-container {
+              height: 250px;
+            }
+            
+            .summary-card .value {
+              font-size: 1.125rem;
+            }
+            
+            table {
+              font-size: 0.75rem;
+            }
+            
+            th, td {
+              padding: 0.375rem;
             }
           }
         </style>
